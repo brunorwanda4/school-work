@@ -1,36 +1,40 @@
-import React, { createContext, useReducer, ReactNode, useContext } from 'react';
+import React, { createContext, useReducer, useContext, ReactNode, useEffect } from 'react';
 
-// Define the user type
 interface User {
   name: string;
   email: string;
 }
 
-// Define the state and action types
 interface AuthState {
   user: User | null;
+  loading: boolean;
 }
 
-type AuthAction = { type: 'LOGIN'; payload: User } | { type: 'LOGOUT' };
+type AuthAction =
+  | { type: 'LOGIN'; payload: User }
+  | { type: 'LOGOUT' }
+  | { type: 'SET_LOADING'; payload: boolean };
 
-// Define the initial state
 const initialAuthState: AuthState = {
-  user: null,
+  user: JSON.parse(localStorage.getItem('auth_user') || 'null'),
+  loading: false,
 };
 
-// Reducer function to manage state changes
 function authReducer(state: AuthState, action: AuthAction): AuthState {
   switch (action.type) {
     case 'LOGIN':
-      return { user: action.payload };
+      localStorage.setItem('auth_user', JSON.stringify(action.payload));
+      return { ...state, user: action.payload, loading: false };
     case 'LOGOUT':
-      return { user: null };
+      localStorage.removeItem('auth_user');
+      return { ...state, user: null, loading: false };
+    case 'SET_LOADING':
+      return { ...state, loading: action.payload };
     default:
       return state;
   }
 }
 
-// Create Context
 const AuthContext = createContext<{
   state: AuthState;
   dispatch: React.Dispatch<AuthAction>;
@@ -39,13 +43,18 @@ const AuthContext = createContext<{
   dispatch: () => null,
 });
 
-// AuthProvider component to wrap around the app
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
+
+  useEffect(() => {
+    const user = localStorage.getItem('auth_user');
+    if (user) {
+      dispatch({ type: 'LOGIN', payload: JSON.parse(user) });
+    }
+  }, []);
 
   return <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>;
 };
 
-// Custom hook to use the Auth context
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

@@ -5,13 +5,18 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Register from "./pages/Register";
 import { useAuth } from "./context/authcontext";
+import Login from "./pages/Login";
 
 const App: React.FC = () => {
   const { state, dispatch } = useAuth();
 
   const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
+    dispatch({ type: "SET_LOADING", payload: true }); // Start loading
+    setTimeout(() => {
+      dispatch({ type: "LOGOUT" }); // Logout after a delay
+    }, 2000); // Simulated 2-second delay
   };
+
   return (
     <Router>
       <div className="navbar bg-base-100  fixed w-full z-10 shadow-lg">
@@ -71,13 +76,18 @@ const App: React.FC = () => {
         </div>
         <div className="navbar-end">
           {state.user ? (
-            <button className="btn btn-error" onClick={handleLogout}>
-              Logout
+            <button
+              className={`btn btn-error ${state.loading ? "btn-disabled" : ""}`}
+              onClick={handleLogout}
+              disabled={state.loading}
+            >
+              {state.loading ? "Loading..." : "Logout"}
             </button>
           ) : (
-            <Link to="/register" className="btn btn-primary">
-              Register
-            </Link>
+            <div className=" space-x-2">
+              <Link to={"/login"} className=" btn btn-info">Login</Link>
+              <Link to={"/register"} className=" btn btn-primary">Register</Link>
+            </div>
           )}
         </div>
       </div>
@@ -85,6 +95,7 @@ const App: React.FC = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
     </Router>

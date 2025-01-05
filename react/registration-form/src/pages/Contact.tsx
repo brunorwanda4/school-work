@@ -23,10 +23,10 @@ const Contact: React.FC = () => {
     <div className="min-h-screen bg-base-200 flex items-center justify-center pt-20">
       <form
         onSubmit={handleSubmit}
-        className="w-96 bg-base-300 p-6 rounded-lg shadow-md space-y-4"
+        className="w-1/3 bg-base-300 p-6 rounded-lg shadow-md space-y-4"
       >
         {state.user ? (
-          <h2 className="text-3xl font-bold">Hello, {state.user.name}! Contact Us</h2>
+          <h2 className="text-3xl font-bold text-center">Hello, {state.user.name}! Contact Us</h2>
         ) : (
           <h2 className="text-3xl font-bold">Contact Us</h2>
         )}
