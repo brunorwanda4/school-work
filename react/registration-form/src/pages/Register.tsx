@@ -18,14 +18,16 @@ const Register: React.FC = () => {
     e.preventDefault();
     if (formData.name && formData.email && formData.password.length >= 8) {
       dispatch({ type: 'LOGIN', payload: { name: formData.name, email: formData.email } });
-      alert('Registration successful!');
+      alert('Registration successful! 🌼');
+      (e.currentTarget as HTMLFormElement).reset();
     } else {
-      alert('Please fill in valid details.');
+      alert('😥😥 Please fill in valid details.');
+      (e.currentTarget as HTMLFormElement).reset();
     }
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center pt-20">
       <form
         onSubmit={handleSubmit}
         className="w-1/3 bg-base-300 p-6 rounded-lg shadow-md space-y-4"

@@ -24,7 +24,7 @@ const About: React.FC = () => {
           <p>
             {!state.user ? (
               <>
-                Please <span className="text-primary font-bold">register or log in</span> to access personalized features!
+                Please <span className="text-primary font-bold">register in</span> to access personalized features!
               </>
             ) : (
               "Thank you for being part of our community."

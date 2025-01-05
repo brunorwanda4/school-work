@@ -20,7 +20,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center pt-20">
       <form
         onSubmit={handleSubmit}
         className="w-96 bg-base-300 p-6 rounded-lg shadow-md space-y-4"
